@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142d45">
+  <meta name="description" content="Draw or upload your own letters, preview your custom typeface, and export an installable font — free, in your browser. Font Builder by Buildiful®.">
+  <title>Font Builder by Buildiful®</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="./buildiful-analytics-consent.js" data-measurement-id="G-TG14RBXLTF" data-tool-name="Font Builder" data-privacy-url="./privacy.html"></script>
+  <script src="js/font-engine.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brandgroup">
+      <a class="logo-link" href="https://buildiful.com/" target="_blank" rel="noopener noreferrer" aria-label="Buildiful® website"><img src="assets/buildiful-logo-white.png" alt="Buildiful®" class="brandlogo"></a>
+      <div class="branddivider" aria-hidden="true"></div>
+      <div class="appname"><strong>Font Builder</strong></div>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn nav-dark" id="newProject">New</button>
+      <button type="button" class="btn nav-dark" id="openProject">Open</button>
+      <button type="button" class="btn nav-dark" id="saveProject">Save project</button>
+      <span class="top-divider" aria-hidden="true"></span>
+      <button type="button" class="btn export-btn" id="exportFont"><span aria-hidden="true">↓</span> Export TTF</button>
+    </div>
+  </header>
+
+  <div class="page-intro">
+    <div>
+      <div class="eyebrow">YOUR OWN TYPEFACE, FROM THE FIRST STROKE</div>
+      <h1>Make every letter yours.</h1>
+      <p>Draw a character, upload a graphic, then turn your alphabet into an installable font. Everything happens in your browser.</p>
+    </div>
+    <div class="completion-badge"><span id="progressCount">0 / 94</span><small>characters created</small><div class="meter"><div class="meter-fill" id="progressFill"></div></div></div>
+  </div>
+
+  <main class="workspace">
+    <aside class="panel glyph-panel" aria-label="Character set">
+      <div class="panel-heading"><div><h2>Characters</h2><p>Pick one to create or edit</p></div><span class="soft-pill">Basic Latin</span></div>
+      <div class="glyph-scroll" id="glyphGroups"></div>
+      <div class="sidebar-tip"><span class="tip-dot">✦</span><div><strong>Every character is optional.</strong><p>Export the letters you have created; fill in more whenever you like.</p></div></div>
+    </aside>
+
+    <section class="main-area" aria-label="Glyph editor and preview">
+      <div class="panel editor-panel">
+        <div class="editor-title-row">
+          <div class="editor-title"><span class="current-character" id="currentCharacter">A</span><div><h2 id="characterHeading">Capital A</h2><p id="characterStatus">Blank character · Ready to draw</p></div></div>
+          <div class="editor-nav"><button class="iconbtn" id="previousChar" aria-label="Previous character" title="Previous character">‹</button><button class="iconbtn" id="nextChar" aria-label="Next character" title="Next character">›</button></div>
+        </div>
+        <div class="editor-toolbar">
+          <div class="tool-switch" role="group" aria-label="Drawing tool"><button class="tool-btn active" id="drawTool" aria-pressed="true">✎ <span>Draw</span></button><button class="tool-btn" id="eraseTool" aria-pressed="false">◻ <span>Erase</span></button></div>
+          <label class="range-label" for="brushSize">Brush <strong id="brushSizeOutput">14</strong></label><input type="range" min="2" max="42" value="14" id="brushSize" aria-label="Brush size">
+          <span class="toolbar-spacer"></span>
+          <button class="mini-btn" id="undoBtn" title="Undo drawing" aria-label="Undo">↶ Undo</button>
+          <button class="mini-btn" id="redoBtn" title="Redo drawing" aria-label="Redo">↷ Redo</button>
+          <button class="mini-btn danger" id="clearBtn">Clear</button>
+        </div>
+        <div class="draw-layout">
+          <div class="paper-wrap" id="paperWrap">
+            <div class="canvas-container">
+              <canvas id="guideCanvas" width="320" height="320" aria-hidden="true"></canvas>
+              <canvas id="glyphCanvas" width="320" height="320" aria-label="Draw the selected character using your mouse, finger, or stylus" tabindex="0"></canvas>
+              <span class="canvas-label baseline-label">BASELINE</span><span class="canvas-label cap-label">CAP HEIGHT</span>
+            </div>
+          </div>
+          <div class="editor-help">
+            <div class="step-number">01 / CREATE</div>
+            <h3>Sketch or upload</h3>
+            <p>Draw with a mouse, stylus, or finger. Your strokes become scalable font outlines when exported.</p>
+            <button type="button" class="btn upload-btn" id="uploadGraphic"><span aria-hidden="true">↑</span> Upload graphic</button>
+            <p class="tiny-help">PNG, JPG or WebP · max 8 MB<br>Transparent images work best.</p>
+            <div class="hint-separator"></div>
+            <div class="step-number">02 / REFINE</div>
+            <label class="setting-label" for="advanceWidth">Character spacing <span id="advanceValue">650</span></label>
+            <input id="advanceWidth" type="range" min="220" max="1100" value="650" step="10">
+            <label class="setting-label" for="smoothness">Outline smoothing <span id="smoothnessValue">2</span></label>
+            <input id="smoothness" type="range" min="0" max="5" value="2" step="1">
+            <p class="tiny-help">Change the spacing for narrow letters, wide letters, and punctuation. Your font remains editable in this project.</p>
+          </div>
+        </div>
+        <div class="canvas-footer"><span><span class="status-dot"></span>Local browser editor</span><span>Draw inside the frame · Upper and lower guides are not exported</span></div>
+      </div>
+      <div class="panel preview-panel">
+        <div class="preview-head"><div><h2>Live type preview</h2><p>See your custom letters in context</p></div><label class="size-setting">Size <select id="previewSize"><option value="36">36 px</option><option selected value="50">50 px</option><option value="68">68 px</option><option value="88">88 px</option></select></label></div>
+        <label for="previewText" class="sr-only">Preview sample text</label>
+        <textarea id="previewText" rows="2" spellcheck="false" placeholder="Type something to preview...">Make something beautiful.</textarea>
+        <div class="type-preview" id="typePreview" aria-live="polite"></div>
+        <p class="preview-note"><span class="small-round">i</span> Characters you have not drawn are shown using a fallback typeface.</p>
+      </div>
+    </section>
+
+    <aside class="panel project-panel" aria-label="Font settings and export">
+      <div class="panel-heading"><div><h2>Your font</h2><p>Give your typeface a name</p></div></div>
+      <label for="fontName" class="setting-label strong">Font family</label>
+      <input class="text-input" id="fontName" type="text" maxlength="60" value="My First Font" autocomplete="off" spellcheck="false" placeholder="e.g. Sunday Scribble">
+      <div class="setting-card"><div class="setting-icon">Aa</div><div><strong>TrueType font</strong><p>Standard .ttf file for installation on macOS, Windows and Linux.</p></div></div>
+      <hr>
+      <div class="detail-title">HOW IT WORKS</div>
+      <ol class="work-steps"><li><div><strong>Choose a character</strong><p>Start with A, or any letter, number or symbol.</p></div></li><li><div><strong>Draw or import</strong><p>Create black shapes on a transparent canvas.</p></div></li><li><div><strong>Preview and export</strong><p>Download a real installable font file.</p></div></li></ol>
+      <div class="export-card"><strong>Your font, your rules.</strong><p>No account. No subscription. Your drawings stay on your device.</p><button type="button" class="btn export-wide" id="exportFontSide"><span aria-hidden="true">↓</span> Export .TTF</button><div class="export-small" id="exportSummary">Create your first character to export.</div></div>
+      <div class="aside-bottom"><button class="text-link" id="analyticsSettings" type="button">Analytics settings</button><a href="privacy.html">Privacy</a><a href="LICENSE">License</a></div>
+    </aside>
+  </main>
+  <footer class="site-footer"><span>Built by Buildiful® <span aria-hidden="true">·</span> Version 1.0.0</span><span>Free &amp; open-source <span aria-hidden="true">·</span> Made to make things</span></footer>
+  <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp" hidden>
+  <input type="file" id="projectInput" accept=".json,.fontbuilder.json,application/json" hidden>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

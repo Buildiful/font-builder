@@ -1,0 +1,39 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local dependencies / cache
+node_modules/
+.cache/
+.npm/
+coverage/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local-only builds, downloads, and generated user projects
+*.ttf
+*.otf
+*.woff
+*.woff2
+*.fontbuilder.json
+*.zip
+dist/
+build/
+*.log
+
+# Local test fixtures / screenshots
+test-*.json
+screenshot-*.png
+rendered-*.png
+__pycache__/
+.pytest_cache/
